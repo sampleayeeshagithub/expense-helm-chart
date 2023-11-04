@@ -19,9 +19,11 @@ pipeline {
          dir('APP') {
            git branch: 'main', url: "https://github.com/sampleayeeshagithub/${APP_NAME}"
          }
-        sh 'helm upgrade -i ${APP_NAME} . -f APP/helm/${ENV}.yaml --set appVersion=${VERSION}'
+        dir('HELM') {
+          git branch: 'main', url: "https://github.com/sampleayeeshagithub/expense-helm-chart"
+          sh 'helm upgrade -i ${APP_NAME} . -f ${WORKSPACE}/APP/helm/${ENV}.yaml --set appVersion=${VERSION}'
+        }
       }
-
     }
   }
   post {
